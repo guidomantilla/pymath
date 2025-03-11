@@ -2,8 +2,7 @@
 phony-goal: ; @echo $@
 
 validate:
-	#black . && flake8 . && mypy .
-	black . && mypy .
+	black . && isort . && flake8 . && mypy .
 
 prepare:
 	pip install pandas-stubs black flake8 mypy

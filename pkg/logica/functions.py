@@ -1,6 +1,5 @@
-import sympy as sp
+from IPython.display import Latex, display
 from sympy import latex
-from IPython.display import display, Latex
 from sympy.logic.boolalg import truth_table
 
 
