@@ -6,21 +6,27 @@ from sympy.core.relational import Relational
 from pkg.logica.functions import print_latex
 
 
-def add_many(r: List[Relational]) -> Relational:
+def transitive_many(r: List[Relational]) -> Relational:
     if len(r) < 2:
         raise ValueError("At least 2 relational expression are required")
 
-    sum = r[0]
+    accum = r[0]
     for rel in r[1:]:
-        sum = add(sum, rel)
+        accum = transitive(accum, rel)
 
-    return sum
+    return accum
 
 
-def add(p: Relational, q: Relational, latex=False, debug=False) -> Relational:
+def transitive(p: Relational, q: Relational, latex=False, debug=False) -> Relational:
+
+    if not p.rhs.equals(q.lhs):
+        raise TypeError(
+            "Both relational expression must be ready for transitive operation"
+        )
 
     if p.__class__ != q.__class__:
-        raise TypeError("Both relational expression must be of the same type")
+            if p.__class__!=sp.Equality and q.__class__!=sp.Equality:
+                raise TypeError("Both relational expression must be of the same type")
 
     relational_operator = p.__class__
 
@@ -46,24 +52,3 @@ def add(p: Relational, q: Relational, latex=False, debug=False) -> Relational:
         print(f"sum: {sum.simplify()}")
 
     return sum.simplify()
-
-
-def transitive_many(r: List[Relational]) -> Relational:
-    if len(r) < 2:
-        raise ValueError("At least 2 relational expression are required")
-
-    sum = r[0]
-    for rel in r[1:]:
-        sum = transitive(sum, rel)
-
-    return sum
-
-
-def transitive(p: Relational, q: Relational, latex=False, debug=False) -> Relational:
-
-    if not p.rhs.equals(q.lhs):
-        raise TypeError(
-            "Both relational expression must be ready for transitive operation"
-        )
-
-    return add(p, q, latex, debug)
